@@ -1,0 +1,51 @@
+{% extends "public/layout.html" %}
+{% block title %}Welcome to SecureVote{% endblock %}
+
+{% block content %}
+<header class="hero text-center mb-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">A New Era of Digital Voting</h1>
+        <p class="lead col-md-8 mx-auto">Cast your vote with unparalleled security, transparency, and confidence. Our platform uses cryptographic hashing to ensure the integrity of every single ballot.</p>
+        <div class="mt-4">
+            {% if 'voter_id' not in session %}
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4 me-3">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4">Voter Login</a>
+            {% else %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-light btn-lg px-4 me-3">Go to Your Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 p-3">
+                <div class="card-body">
+                    <i class="bi bi-shield-lock-fill fs-1 text-primary"></i>
+                    <h3 class="card-title mt-3">Secure Hashing</h3>
+                    <p class="card-text">Every vote is secured with a SHA-256 hash, creating a tamper-proof digital fingerprint.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 p-3">
+                <div class="card-body">
+                    <i class="bi bi-search fs-1 text-primary"></i>
+                    <h3 class="card-title mt-3">Verifiable Results</h3>
+                    <p class="card-text">Receive a unique Vote ID to publicly verify that your vote was recorded correctly and without alteration.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 p-3">
+                <div class="card-body">
+                    <i class="bi bi-person-check-fill fs-1 text-primary"></i>
+                    <h3 class="card-title mt-3">Voter Anonymity</h3>
+                    <p class="card-text">While your vote's integrity is verifiable, your personal identity remains confidential throughout the process.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

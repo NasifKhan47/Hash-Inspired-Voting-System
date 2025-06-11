@@ -1,0 +1,44 @@
+{% extends "public/layout.html" %}
+{% block title %}Voter Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Voter Dashboard</h2>
+        {% if voter %}
+            <span class="badge fs-6 bg-{{ 'success' if voter.iseligible else 'danger' }}">
+                <i class="bi bi-patch-check-fill"></i>
+                Voting Status: {{ 'Eligible' if voter.iseligible else 'Not Eligible' }}
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Upcoming & Active Elections</h5>
+        </div>
+        <div class="card-body">
+            {% if elections %}
+            <div class="list-group">
+                {% for election in elections %}
+                <a href="{{ url_for('view_election', election_id=election.electionid) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="mb-1">{{ election.title }}</h5>
+                        <p class="mb-1 text-muted small">{{ election.description | truncate(120) }}</p>
+                        <small><strong>Starts:</strong> {{ election.startdate.strftime('%b %d, %Y %I:%M %p') }} | <strong>Ends:</strong> {{ election.enddate.strftime('%b %d, %Y %I:%M %p') }}</small>
+                    </div>
+                    {% if election.electionid in voted_elections %}
+                    <span class="badge bg-success rounded-pill align-self-center"><i class="bi bi-check-circle-fill"></i> Voted</span>
+                    {% else %}
+                    <span class="badge bg-primary rounded-pill align-self-center">Open</span>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info mb-0">There are currently no active elections. Please check back later.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

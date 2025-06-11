@@ -1,0 +1,52 @@
+{% extends "admin/layout.html" %}
+{% block title %}Manage Elections{% endblock %}
+{% block page_title %}Manage Elections{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+    <a href="{{ url_for('admin_create_election') }}" class="btn btn-primary"><i class="bi bi-plus-circle-fill me-2"></i>Create New Election</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Starts</th>
+                        <th>Ends</th>
+                        <th class="text-center">Candidates</th>
+                        <th class="text-center">Votes</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for election in elections %}
+                    <tr>
+                        <td>{{ election.electionid }}</td>
+                        <td><strong>{{ election.title }}</strong></td>
+                        <td>{{ election.startdate.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ election.enddate.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td class="text-center">{{ election.candidatecount }}</td>
+                        <td class="text-center">{{ election.votecount }}</td>
+                        <td class="text-end">
+                             <a href="{{ url_for('admin_manage_candidates', election_id=election.electionid) }}" class="btn btn-sm btn-outline-secondary" title="Manage Candidates"><i class="bi bi-people"></i></a>
+                             <a href="{{ url_for('admin_edit_election', election_id=election.electionid) }}" class="btn btn-sm btn-outline-primary" title="Edit Election"><i class="bi bi-pencil-fill"></i></a>
+                            <form action="{{ url_for('admin_delete_election', election_id=election.electionid) }}" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this election? This cannot be undone.');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete Election"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center p-4">No elections have been created yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

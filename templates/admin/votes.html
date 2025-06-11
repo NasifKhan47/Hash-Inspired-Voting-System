@@ -1,0 +1,38 @@
+{% extends "admin/layout.html" %}
+{% block title %}View All Votes{% endblock %}
+{% block page_title %}All Votes Cast{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+         <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                 <thead class="table-light">
+                    <tr>
+                        <th>Vote ID</th>
+                        <th>Election</th>
+                        <th>Voter</th>
+                        <th>Candidate</th>
+                        <th>Time</th>
+                        <th>Hash Reference</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vote in votes %}
+                    <tr>
+                        <td><strong>{{ vote.voteid }}</strong></td>
+                        <td>{{ vote.electiontitle }}</td>
+                        <td>{{ vote.votername }} ({{ vote.voteremail }})</td>
+                        <td>{{ vote.candidatename }}</td>
+                        <td>{{ vote.votedat.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td><code class="small" title="{{ vote.hashreference }}">{{ vote.hashreference[:20] }}...</code></td>
+                    </tr>
+                    {% else %}
+                     <tr><td colspan="6" class="text-center p-4">No votes have been cast in any election yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "public/layout.html" %}
+{% block title %}{{ election.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-4">
+        <a href="{{ url_for('dashboard') }}" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">{{ election.title }}</h2>
+            <p class="card-text">{{ election.description }}</p>
+            <hr>
+            <div class="row text-muted small">
+                <div class="col-md-6"><i class="bi bi-calendar-play"></i> <strong>Starts:</strong> {{ election.startdate.strftime('%A, %B %d, %Y at %I:%M %p') }}</div>
+                <div class="col-md-6"><i class="bi bi-calendar-check"></i> <strong>Ends:</strong> {{ election.enddate.strftime('%A, %B %d, %Y at %I:%M %p') }}</div>
+            </div>
+        </div>
+    </div>
+
+    {% if has_voted %}
+        <div class="alert alert-success fs-5 text-center">
+            <i class="bi bi-check-circle-fill"></i> You have already voted in this election. Thank you for your participation!
+        </div>
+    {% elif not is_election_active %}
+        <div class="alert alert-warning fs-5 text-center">
+            <i class="bi bi-hourglass-split"></i> This election is not currently active for voting.
+        </div>
+    {% elif not session.get('is_eligible') %}
+         <div class="alert alert-danger fs-5 text-center">
+            <i class="bi bi-x-circle-fill"></i> You are currently not eligible to vote. Please contact an administrator.
+        </div>
+    {% else %}
+        <form action="{{ url_for('cast_vote', election_id=election.electionid) }}" method="POST">
+            <div class="card">
+                <div class="card-header"><h4 class="mb-0">Select a Candidate</h4></div>
+                <div class="card-body">
+                    {% if candidates %}
+                        <div class="list-group">
+                            {% for candidate in candidates %}
+                            <label class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100">
+                                    <input class="form-check-input flex-shrink-0 mt-3 me-3" type="radio" name="candidate_id" value="{{ candidate.candidateid }}" id="cand{{candidate.candidateid}}" required>
+                                    <div>
+                                        <h5 class="mb-1">{{ candidate.fullname }}</h5>
+                                        <p class="mb-1 text-primary fw-bold">{{ candidate.party }}</p>
+                                        <p class="mb-0 small text-muted">{{ candidate.bio }}</p>
+                                    </div>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-box-arrow-in-right"></i> Submit Your Vote</button>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">No candidates have been registered for this election yet.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    {% endif %}
+
+</div>
+{% endblock %}

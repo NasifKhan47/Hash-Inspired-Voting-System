@@ -1,0 +1,44 @@
+{% extends "admin/layout.html" %}
+{% block title %}Manage Voters{% endblock %}
+{% block page_title %}Manage Voters{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                 <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Registered</th>
+                        <th class="text-center">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voter in voters %}
+                    <tr>
+                        <td>{{ voter.voterid }}</td>
+                        <td><strong>{{ voter.fullname }}</strong></td>
+                        <td>{{ voter.email }}</td>
+                        <td>{{ voter.registeredat.strftime('%Y-%m-%d') }}</td>
+                        <td class="text-center">
+                            {% if voter.isadmin %}
+                            <span class="badge bg-danger">Admin</span>
+                            {% elif voter.iseligible %}
+                            <span class="badge bg-success">Eligible</span>
+                            {% else %}
+                             <span class="badge bg-warning">Not Eligible</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                     <tr><td colspan="5" class="text-center p-4">No voters have registered yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

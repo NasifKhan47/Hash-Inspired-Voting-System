@@ -1,0 +1,29 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ form_title }}{% endblock %}
+{% block page_title %}{{ form_title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body p-4">
+        <form method="POST">
+             <input type="hidden" name="election_id" value="{{ election_id }}">
+            <div class="mb-3">
+                <label for="full_name" class="form-label">Candidate Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" value="{{ candidate.fullname if candidate else '' }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="party" class="form-label">Political Party</label>
+                <input type="text" class="form-control" id="party" name="party" value="{{ candidate.party if candidate else '' }}">
+            </div>
+            <div class="mb-3">
+                <label for="bio" class="form-label">Biography</label>
+                <textarea class="form-control" id="bio" name="bio" rows="4">{{ candidate.bio if candidate else '' }}</textarea>
+            </div>
+             <div class="mt-3">
+                <a href="{{ url_for('admin_manage_candidates', election_id=election_id) }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle-fill me-2"></i>Save Candidate</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

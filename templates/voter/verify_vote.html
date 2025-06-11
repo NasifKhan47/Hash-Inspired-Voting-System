@@ -1,0 +1,43 @@
+{% extends "public/layout.html" %}
+{% block title %}Verify Your Vote{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card p-4">
+                <h3 class="card-title text-center mb-4">Verify Vote Integrity</h3>
+                <p class="text-center text-muted">Enter the unique Vote ID you received after voting to confirm its status and integrity.</p>
+                <form method="POST">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="vote_id" placeholder="Enter Vote ID..." required>
+                        <button class="btn btn-primary" type="submit"><i class="bi bi-check-circle"></i> Verify</button>
+                    </div>
+                </form>
+
+                {% if result %}
+                <div class="mt-4">
+                    <div class="alert alert-{{ result.status }}" role="alert">
+                        <h4 class="alert-heading"><i class="bi bi-{{ 'patch-check-fill' if result.status == 'success' else 'exclamation-triangle-fill' }}"></i> {{ result.message }}</h4>
+                        {% if result.details %}
+                        <hr>
+                        <p class="mb-1"><strong>Election:</strong> {{ result.details.electiontitle }}</p>
+                        <p class="mb-1"><strong>Voted For:</strong> {{ result.details.candidatename }}</p>
+                        <p class="mb-1"><strong>Voted At:</strong> {{ result.details.votedat.strftime('%Y-%m-%d %H:%M:%S') }} UTC</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            <div class="card p-4 mt-4">
+                <h5>How Verification Works</h5>
+                <p class="small text-muted">Our system generates a stable cryptographic hash based on core, unchangeable data points of your vote. When you verify, we re-calculate this hash. If the new hash matches the one stored in our database, the vote's integrity is confirmed.</p>
+                <div class="bg-light p-3 rounded">
+                    <code class="d-block text-center text-dark small">Hash = SHA256(YourVoterID | ElectionID | CandidateID)</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
